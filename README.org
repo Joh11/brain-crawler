@@ -1,0 +1,52 @@
+#+title: README
+#+author: Johan Félisaz
+#+email: johan@protonmail.com
+
+Brain crawler is a project to build a so called "second brain". As of
+today, the world yields us an overhelming amount of information. It
+has become necessary to have a systematic way to store it in order to
+keep up. Not only storing it is the issue, but also storing it in a
+way for easy access later. 
+
+This is why Brain Crawler is built up onto the following principles: 
+- plain text storage. This allows for long term storage, on a longer
+  time scale that the lifetime of this project. For the same reason,
+  even though it only supports =org-mode= for now, it is built in a
+  format agnostic way. Markdown support could be added in the
+  future. More importantly, it permits the version control of the
+  files, i.e. putting them in a =git= repository.
+- client / server architecture as well as local usage. A second brain
+  should be accessible any time : this is why it is necessary to make
+  a smartphone client. However, it should not become unavailable when
+  internet goes down : this is why a local copy should be able to run
+  by itself (only computer support planned for now).
+- graph based. Based on my own knowledge of second brain like systems,
+  the hard problem is scalability. A system based on nodes and links
+  between nodes is more resilient to evolution and proliferation of
+  nodes than a rigid hierarchy.
+
+* Implementation details
+** Client
+*** Android/iOS
+    A smartphone client is currently being developped using
+    =react-native=.
+*** Web client
+    The nodes will also be accessible on the web, using a web client
+    developped alongside with the server using =django=.
+** Server
+   The server maintains a database of the nodes and the links between
+   them. This database does not store the content of the nodes ; they are
+   read on the fly for each request. This allows to write a backend
+   agnostic server : for now, the files are written in =org-mode=, though
+   they could be in =markdown=, a binary format, or a database in the
+   future.
+
+   The nodes and links can be queried using a standard REST API. Note
+   that it does not implement the edition the nodes : as the files could
+   be put inside a =git= repository, they should not be modified
+   improperly.
+
+   The server will be written in =Python= using =Django=.
+
+* Misc notes
+** [[https://aws.amazon.com/fr/getting-started/hands-on/deploy-python-application/][Django with AWS Lightsail]]
