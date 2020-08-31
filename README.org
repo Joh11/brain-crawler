@@ -60,9 +60,33 @@ This is why Brain Crawler is built up onto the following principles:
 *** TODO Parser
 **** TODO Indexing of files
 *** Other
-** Client
-*** TODO Web client
-*** TODO Smartphone client
-
+** TODO Web client
+** Smartphone client
+*** [[https://docs.expo.io/guides/splash-screens/][Create a splash screen with Expo]]
+*** All the views
+- graph, neurons-like display
+  - node preview ?
+- search
+- node display
+- settings
+- log in screen
+*** How the views are laid out
+- Tab controller
+  - Graph
+    - When the user touches a node, a bottom screen appears with the
+      details
+    - If scrolled up, it turns into the full view page
+  - Settings
+    - Clean search history
+    - Server
+      - URL input
+      - custom port switch
+	- port input if on
+    - Login
+      - Text logged in as ...
+      - Log out button with confirmation
+- Inside the graph view
+  - Search
+    - Search suggestions
 * Misc notes
 ** [[https://aws.amazon.com/fr/getting-started/hands-on/deploy-python-application/][Django with AWS Lightsail]]
