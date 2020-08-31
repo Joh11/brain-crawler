@@ -8,30 +8,32 @@ from rest_framework import permissions
 from .models import Node
 from .serializers import *
 
+# Permission
+
+class IsOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user
+
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# class NodeViewSet(ReadOnlyModelViewSet):
-#     queryset = Node.objects.all()
-#     serializer_class = NodeSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+class NodeViewSet(ReadOnlyModelViewSet):
+    queryset = Node.objects.none()
+    serializer_class = ListNodeSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    
+    serializers = {
+        'list': ListNodeSerializer,
+        'retrieve': DetailNodeSerializer
+    }
+    def get_serializer_class(self):
+        return self.serializers[self.action]
 
-@csrf_exempt
-def node_list(request, user_pk):
-    owner = get_object_or_404(User, pk=user_pk)
-    if request.method == 'GET':
-        nodes = Node.objects.all().filter(owner=owner)
-
-        serializer = ListNodeSerializer(nodes, many=True, context={'request': request})
-        return JsonResponse(serializer.data, safe=False)
-
-@csrf_exempt
-def node_detail(request, user_pk, pk):
-    node = get_object_or_404(Node, pk=pk)
-        
-    if request.method == 'GET':
-        
-        serializer = DetailNodeSerializer(node, context={'request': request})
-        return JsonResponse(serializer.data)
+    def get_queryset(self):
+        # Just so that it does not crash when using an anonymous user
+        # The IsAuthenticated perm should be used anyway
+        if not self.request.user.is_authenticated:
+            return Node.objects.none()
+        return Node.objects.filter(owner=self.request.user)

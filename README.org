@@ -54,10 +54,9 @@ This is why Brain Crawler is built up onto the following principles:
 - [X] node list no details
 - [X] node list add the link to detail
 - [X] node detail add content of file
-- [X] node end point: /users/:id/nodes
 **** Permission model
 - [X] readonly everywhere
-- [ ] only owner can see nodes
+- [X] only owner can see nodes
 *** TODO Parser
 *** Other
 - [ ] subfolder for each user for the org files ?
