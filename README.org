@@ -51,12 +51,12 @@ This is why Brain Crawler is built up onto the following principles:
 * Roadmap
 ** Server
 *** API
-- [ ] node list no details
-- [ ] node list add the link to detail
-- [ ] node detail add content of file
-- [ ] node end point: /users/:id/nodes
+- [X] node list no details
+- [X] node list add the link to detail
+- [X] node detail add content of file
+- [X] node end point: /users/:id/nodes
 **** Permission model
-- [ ] readonly everywhere
+- [X] readonly everywhere
 - [ ] only owner can see nodes
 *** TODO Parser
 *** Other

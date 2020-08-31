@@ -6,7 +6,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import permissions
 
 from .models import Node
-from .serializers import UserSerializer, NodeSerializer
+from .serializers import *
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
@@ -24,7 +24,7 @@ def node_list(request, user_pk):
     if request.method == 'GET':
         nodes = Node.objects.all().filter(owner=owner)
 
-        serializer = NodeSerializer(nodes, many=True, context={'request': request})
+        serializer = ListNodeSerializer(nodes, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
 
 @csrf_exempt
@@ -33,5 +33,5 @@ def node_detail(request, user_pk, pk):
         
     if request.method == 'GET':
         
-        serializer = NodeSerializer(node, context={'request': request})
+        serializer = DetailNodeSerializer(node, context={'request': request})
         return JsonResponse(serializer.data)

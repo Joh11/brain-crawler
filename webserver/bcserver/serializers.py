@@ -4,11 +4,18 @@ from rest_framework.reverse import reverse
 
 from .models import Node
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username']
+class FileContentField(serializers.Field):
+    """Takes a FilePathField from Django, and returns its content."""
 
+    def to_representation(self, value):
+        # read the file
+        # TODO some safety here
+        with open(value, 'r') as f:
+            return f.read()
+
+    def to_internal_value(self, value):
+        raise serializers.ValidationError('The FileContentField cannot be edited')
+            
 class NodeHyperlink(serializers.HyperlinkedRelatedField):
     view_name = 'node-detail'
     # queryset = Node.objects.all()
@@ -28,10 +35,24 @@ class NodeHyperlink(serializers.HyperlinkedRelatedField):
         }
 
         return self.get_queryset().get(**lookup_kwargs)
-        
-class NodeSerializer(serializers.HyperlinkedModelSerializer):
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    nodes = NodeHyperlink('node-detail', many=True, read_only=True)
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'nodes']
+
+class DetailNodeSerializer(serializers.HyperlinkedModelSerializer):
+    url = NodeHyperlink('node-detail', read_only=True, source='*')
+    links = NodeHyperlink('node-detail', many=True, read_only=True)
+    content = FileContentField(read_only=True, source='path')
+    class Meta:
+        model = Node
+        fields = ['url', 'owner', 'title', 'links', 'content']
+
+class ListNodeSerializer(serializers.HyperlinkedModelSerializer):
     url = NodeHyperlink('node-detail', read_only=True, source='*')
     links = NodeHyperlink('node-detail', many=True, read_only=True)
     class Meta:
         model = Node
-        fields = ['url', 'owner', 'title', 'links', 'path']
+        fields = ['url', 'owner', 'title', 'links']
