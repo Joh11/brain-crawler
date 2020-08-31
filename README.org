@@ -58,8 +58,8 @@ This is why Brain Crawler is built up onto the following principles:
 - [X] readonly everywhere
 - [X] only owner can see nodes
 *** TODO Parser
+**** TODO Indexing of files
 *** Other
-- [ ] subfolder for each user for the org files ?
 ** Client
 *** TODO Web client
 *** TODO Smartphone client
