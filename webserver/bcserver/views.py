@@ -36,4 +36,4 @@ class NodeViewSet(ReadOnlyModelViewSet):
         # The IsAuthenticated perm should be used anyway
         if not self.request.user.is_authenticated:
             return Node.objects.none()
-        return Node.objects.filter(owner=self.request.user)
+        return Node.objects.filter(owner=self.request.user).order_by('id')
