@@ -48,5 +48,22 @@ This is why Brain Crawler is built up onto the following principles:
 
    The server will be written in =Python= using =Django=.
 
+* Roadmap
+** Server
+*** API
+- [ ] node list no details
+- [ ] node list add the link to detail
+- [ ] node detail add content of file
+- [ ] node end point: /users/:id/nodes
+**** Permission model
+- [ ] readonly everywhere
+- [ ] only owner can see nodes
+*** TODO Parser
+*** Other
+- [ ] subfolder for each user for the org files ?
+** Client
+*** TODO Web client
+*** TODO Smartphone client
+
 * Misc notes
 ** [[https://aws.amazon.com/fr/getting-started/hands-on/deploy-python-application/][Django with AWS Lightsail]]
