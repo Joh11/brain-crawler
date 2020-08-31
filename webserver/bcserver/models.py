@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class Node(models.Model):
     """A node is an atomic fragment of knowledge. It is just indexed from
@@ -15,7 +16,7 @@ content of the file.
     # TODO prevent self reference
     links = models.ManyToManyField('self', symmetrical=False,
                                    related_name='backlinks', blank=True)
-    path = models.FilePathField(path='/home/johan/org-roam/') # TODO add a root directory
+    path = models.FilePathField(path=settings.NODES_PATH) # TODO add a root directory
 
     def __str__(self):
         return self.title
