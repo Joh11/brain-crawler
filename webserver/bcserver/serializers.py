@@ -25,9 +25,9 @@ class DetailNodeSerializer(serializers.HyperlinkedModelSerializer):
     content = FileContentField(read_only=True, source='path')
     class Meta:
         model = Node
-        fields = ['url', 'owner', 'title', 'links', 'content']
+        fields = ['url', 'owner', 'title', 'links', 'backlinks', 'content']
 
 class ListNodeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Node
-        fields = ['url', 'owner', 'title', 'links']
+        fields = ['url', 'owner', 'title', 'backlinks', 'links']
