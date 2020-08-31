@@ -7,6 +7,7 @@ from rest_framework import permissions
 
 from .models import Node
 from .serializers import *
+from .indexer import index_files
 
 # Permission
 
@@ -37,3 +38,11 @@ class NodeViewSet(ReadOnlyModelViewSet):
         if not self.request.user.is_authenticated:
             return Node.objects.none()
         return Node.objects.filter(owner=self.request.user).order_by('id')
+
+    
+# TODO find a better way to do it
+def update_db(request):
+    print("Updating db ...")
+    index_files()
+    print("Done. ")
+    return HttpResponse()
