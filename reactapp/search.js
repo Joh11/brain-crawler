@@ -74,25 +74,6 @@ function SearchResults(props) {
 	    </>);
 }
 
-function SearchHistory() {
-    const data = ['Dark Vador', 'Gandalf', 'Why is the Earth flat', 'Au revoir. '];
-
-    function itemComponent({ item }) {
-	return (
-		<View>
-		<Text>{item}</Text>
-		<Button title="x"/>
-		</View>
-	);
-    }
-    
-    return (<SectionList
-	    sections={[{title: 'Search history', data: data}]}
-	    renderItem={itemComponent}
-	    renderSectionHeader={({section}) => <Text>{section.title}</Text>}
-	    />);
-}
-
 export function SearchScreen({ navigation }) {
     const [query, setQuery] = React.useState('');
 
@@ -114,7 +95,7 @@ export function SearchScreen({ navigation }) {
 	    <View style={styles.mainView}>
 	    {
 		(query == '') ?
-		    (<SearchHistory />)
+		    (<></>)
 		    : (<SearchResults query={query} />)
 	    }
 	</View>

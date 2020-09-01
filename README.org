@@ -77,7 +77,6 @@ This is why Brain Crawler is built up onto the following principles:
       details
     - If scrolled up, it turns into the full view page
   - Settings
-    - Clean search history
     - Server
       - URL input
       - custom port switch

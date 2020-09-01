@@ -31,11 +31,6 @@ export function SettingsScreen() {
 	    <TextInput style={styles.textInput} textContentType="URL"/>
 	    <CustomPortComponent />
 	    </View>
-
-	    <View>
-	    <Text>Search</Text>
-	    <Button title="Clear search history" />
-	    </View>
 	    </View>
     );
 }
