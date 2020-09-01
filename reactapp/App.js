@@ -4,16 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { SettingsScreen } from './settings.js'
+import { GraphScreen } from './graph.js'
 import { styles } from './styles.js'
-
-function GraphScreen() {
-    return (
-	    <View style={styles.mainView}>
-	    <TextInput style={styles.textInput} placeholder="Search" editable={false} />
-	    </View>
-    );
-}
-
 
 const Tab = createBottomTabNavigator();
 
