@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, Text, Button, Switch, TextInput, FlatList, SectionList } from 'react-native';
+import { ActivityIndicator, View, Text, Button, Switch, TextInput, FlatList, SectionList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './styles.js'
 
@@ -18,27 +19,59 @@ function SearchResults(props) {
     const username = 'johan';
     const password = '0000';
 
-    const [req, setReq] = React.useState({});
+    async function fetchData(query, url, setData, setLoading) {
+	try {
+	    let headers = {headers: {Authorization: 'Basic am9oYW46MDAwMA=='}};
+	    let response = await fetch(url + '?search=' + query, headers);
+	    let json = await response.json();
 
-    // fetch(url, {headers: {Authorization: 'Basic am9oYW46MDAwMA=='}})
-    // 	.then((response) => {
-    // 	    let json = response.json()
-    // 	    setReq(json);
-    // 	})
-    // 	.catch((error) => {console.error(error); });
+	    // Now grab all the results, and call the setter
+	    // console.log(json);
+	    if(json.results) {
+		setData(json.results);
+	    } else {
+		console.log('Wrong results : ');
+		console.log(json);
+	    }
 
-    const data = ['Michel Atyiah', props.query, 'Dark Vador', 'Gandalf'];
+	    if (json.next) {
+		// Do the same thing for the rest of the objects
+		// fetchData(json.next, setter);
+	    }
+	    
+	} catch (error) {
+	    console.error(error);
+	}
 
-    function itemComponent({ item }) {
+	setLoading(false);
+    }
+
+    function searchItemComponent(navigation, item) {
 	return (
-		<Text>{item.key}</Text>
+		<Button
+	    title={item.title}
+	    onPress={() => {navigation.navigate('Viewer', {partialNode: item})}}/>
 	);
     }
     
-    return (<FlatList
-	    data={data.map((item) => ({key: item}))}
-	    renderItem={itemComponent}
-	    />);
+    const [data, setData] = React.useState([]);
+    const [isLoading, setLoading] = React.useState(true);
+    
+    React.useEffect(() => {
+	fetchData(props.query, url, setData, setLoading);
+    }, [props.query]);
+    console.log(data);
+    
+    const navigation = useNavigation();
+    
+    return (<>
+	    {isLoading ? (<ActivityIndicator/>) : (<></>)}
+	    <FlatList
+	    data={data}
+	    keyExtractor={(item, index) => item.title}
+	    renderItem={({item})=> searchItemComponent(navigation, item)}
+	    />
+	    </>);
 }
 
 function SearchHistory() {
@@ -69,7 +102,8 @@ export function SearchScreen({ navigation }) {
 		    <SearchHeaderComponent
 		autoFocus={true}
 		value={query}
-		onChangeText={text => setQuery(text)}/>
+		onChangeText={text => {setQuery(text);}}
+		    />
 	    ),
 	});
     });

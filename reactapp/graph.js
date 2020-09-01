@@ -7,6 +7,7 @@ import { GLView } from 'expo-gl';
 
 import { styles } from './styles.js'
 import { SearchHeaderComponent, SearchScreen } from './search.js'
+import { ViewerScreen } from './viewer.js'
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,7 @@ void main(void) {
 	gl.endFrameEXP();
 	}
 
+	render(0);
 	requestAnimationFrame(render);
     }
     
@@ -84,7 +86,8 @@ export function GraphScreen() {
 	options={({route, navigation}) => ({headerTitle: "",
 					    route: {route},
 					    navigation: {navigation}})} />
-	    <Stack.Screen name="Search" component={SearchScreen} options={{headerTitle: ""}}/>
+	    <Stack.Screen name="Search" component={SearchScreen} options={{headerTitle: ""}} />
+	    <Stack.Screen name="Viewer" component={ViewerScreen} options={{headerTitle: ""}} />
 	    </Stack.Navigator>
     );
 }
