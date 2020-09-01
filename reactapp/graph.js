@@ -11,23 +11,22 @@ import { ViewerScreen } from './viewer.js'
 
 const Stack = createStackNavigator();
 
-function GraphView() {
+function GraphView(props) {
     function onContextCreate(gl) {
 	const vertSrc = `
-void main(void) {
-  gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-  gl_PointSize = 100.0;
-}
-`;
+attribute vec2 position;
+varying vec2 uv;
+void main() {
+  gl_Position = vec4(position.x, -position.y, 0.0, 1.0);
+  uv = vec2(0.5, 0.5) * (position+vec2(1.0, 1.0));
+}`;
 	const fragSrc = `
-void main(void) {
-  gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-}
-`;
+precision highp float;
+varying vec2 uv;
+void main () {
+  gl_FragColor = vec4(uv.x, uv.y, 0.5, 1.0);
+}`;
 
-	gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-	gl.clearColor(0, 0, 1, 1);
-	
 	// Compile vertex and fragment shader
 	const vert = gl.createShader(gl.VERTEX_SHADER);
 	gl.shaderSource(vert, vertSrc);
@@ -41,18 +40,41 @@ void main(void) {
 	gl.attachShader(program, vert);
 	gl.attachShader(program, frag);
 	gl.linkProgram(program);
-	gl.useProgram(program);
 
+	// Save position attribute
+	const positionAttrib = gl.getAttribLocation(program, 'position');
 
-	function render(now) {
-	    gl.clear(gl.COLOR_BUFFER_BIT);
-	    gl.drawArrays(gl.POINTS, 0, 1);
-	    gl.flush();
-	gl.endFrameEXP();
-	}
+	// Create buffer
+	const buffer = gl.createBuffer();
+	
+	function animate(now) {
+	    try {
+		// Clear
+		gl.clearColor(0, 0, 1, 1);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		
+		// Bind buffer, program and position attribute for use
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		gl.useProgram(program);
+		gl.enableVertexAttribArray(positionAttrib);
+		gl.vertexAttribPointer(positionAttrib, 2, gl.FLOAT, false, 0, 0);
 
-	render(0);
-	requestAnimationFrame(render);
+		// Buffer data and draw!
+		const speed = props.speed || 0.5;
+		const a = 0.48 * Math.sin(0.001 * speed * now) + 0.5;
+		const verts = new Float32Array([-a, -a, a, -a, -a, a, -a, a, a, -a, a, a]);
+		gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+		gl.drawArrays(gl.TRIANGLES, 0, verts.length / 2);
+
+		// Submit frame
+		gl.flush();
+		gl.endFrameEXP();
+	    } finally {
+		gl.enableLogging = false;
+		requestAnimationFrame(animate);
+	    }
+	};
+	animate();
     }
     
     return (<View>
