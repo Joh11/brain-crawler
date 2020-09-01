@@ -20,7 +20,6 @@ export function ViewerScreen({ route, navigation }) {
 		return;
 	    }
 
-	    
 	    let headers = {headers: {Authorization: 'Basic am9oYW46MDAwMA=='}};
 	    let response = await fetch(node.url, headers);
 	    let json = await response.json();
