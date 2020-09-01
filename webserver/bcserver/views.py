@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import permissions
+from rest_framework import filters
 
 from .models import Node
 from .serializers import *
@@ -24,6 +25,9 @@ class NodeViewSet(ReadOnlyModelViewSet):
     queryset = Node.objects.none()
     serializer_class = ListNodeSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+    # Searching stuff
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
     
     serializers = {
         'list': ListNodeSerializer,
@@ -37,6 +41,7 @@ class NodeViewSet(ReadOnlyModelViewSet):
         # The IsAuthenticated perm should be used anyway
         if not self.request.user.is_authenticated:
             return Node.objects.none()
+
         return Node.objects.filter(owner=self.request.user).order_by('id')
 
     
