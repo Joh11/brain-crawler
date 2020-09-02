@@ -2,18 +2,27 @@ import * as React from 'react';
 import { View, Text, Button, Switch, TextInput, FlatList, SectionList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { WebView } from 'react-native-webview';
+import Canvas from 'react-native-canvas';
 
 import { styles } from './styles.js'
 import { SearchHeaderComponent, SearchScreen } from './search.js'
 import { ViewerScreen } from './viewer.js'
+import { improveContext } from './canvas.js'
 
 const Stack = createStackNavigator();
 
 function GraphView(props) {
-    return (<WebView
-            source={{ html: '<h1>Je suis un titre en HTML</h1>' }}
-	    />);
+    async function handleCanvas(canvas) {
+	const ctx = await canvas.getContext('2d');
+	improveContext(ctx);
+	
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	ctx.drawNode(200, 20, 'Bonjour à tsss sss sss ddd à tous', 'red');
+    }
+    return (
+	    <Canvas ref={handleCanvas}/>);
 }
 
 function MainGraphScreen({ navigation }) {
