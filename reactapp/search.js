@@ -15,7 +15,7 @@ export function SearchHeaderComponent(props) {
 
 // Use the query props to put in the query
 function SearchResults(props) {
-    const url = 'http://127.0.0.1:8000/api/nodes/';
+    const url = 'http://192.168.1.44:8000/api/nodes/';
     const username = 'johan';
     const password = '0000';
 
