@@ -8,12 +8,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from .parser import OrgParser
+from .parser import extract_simple
 from .models import Node
-
-parsers = {
-    'org': OrgParser
-}
 
 def file_iter(root_path, extensions):
     """Iterate through every file in the given root_path directory,
@@ -49,9 +45,9 @@ def index_files():
 def index_files_for_user(directory, user):
     paths = []
     # step 1 : add entries
-    for path, ext in file_iter(directory, list(parsers.keys())):
-        parser = parsers[ext]
-        title, links = parser.extract_simple(path)
+    for path, ext in file_iter(directory, ['org']):
+        title, links = extract_simple(path)
+        links = [os.path.join(directory, link) for link in links]
         print('Entry "{}" ({})'.format(title, links))
         try:      # check if the file is in the database
             node = Node.objects.get(path=path)

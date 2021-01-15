@@ -33,13 +33,14 @@ This is why Brain Crawler is built up onto the following principles:
 *** Web client
     The nodes will also be accessible on the web, using a web client
     developped alongside with the server using =django=.
+
+    The client is responsible for the parsing of the =org-mode= files.
 ** Server
    The server maintains a database of the nodes and the links between
-   them. This database does not store the content of the nodes ; they are
-   read on the fly for each request. This allows to write a backend
-   agnostic server : for now, the files are written in =org-mode=, though
-   they could be in =markdown=, a binary format, or a database in the
-   future.
+   them. This database does not store the content of the nodes ; they
+   are read on the fly for each request. The files are written in
+   =org-mode=. The server does not have to parse the org mode files ;
+   it just need to look for links inside to list backlinks.
 
    The nodes and links can be queried using a standard REST API. Note
    that it does not implement the edition the nodes : as the files could
